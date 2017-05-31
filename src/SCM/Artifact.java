@@ -15,6 +15,12 @@ public class Artifact {
 		this.artifact_original = artifact_original;
 	}
 
+	public Artifact(String[] arti) {
+		this.artifact_name = arti[0];
+		this.artifact_path = arti[2];
+		this.artifact_original = arti[1];
+	}
+
 	public String getArtifact_name() {
 		return artifact_name;
 	}
@@ -26,4 +32,6 @@ public class Artifact {
 	public String getArtifact_original() {
 		return artifact_original;
 	}
+	
+	
 }

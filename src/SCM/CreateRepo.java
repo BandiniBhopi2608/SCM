@@ -26,20 +26,23 @@ public class CreateRepo {
 			throws IOException {
 		
 		File flSourcePath = new File(strSourcePath);
-		if (!flSourcePath.exists()) {
-			System.out.println("Directory '" + strSourcePath + "' does not exists.");
-			return;
-		}
-		
 		if (!flSourcePath.isDirectory()) {
 			System.out.println("Source Path is not a valid directory.");
 			return;
 
 		}
+		if (!flSourcePath.exists()) {
+			System.out.println("Directory '" + strSourcePath + "' does not exists.");
+			return;
+		}
 
 		String strSrcFolder = strSourcePath.substring(strSourcePath.lastIndexOf(File.separator) + 1);
 		File flTargetRepoPath = new File(strDestinationPath + File.separator + strSrcFolder);
-		if (flTargetRepoPath.mkdir()) {
+		boolean bCreateRepo = true;
+		if(!flTargetRepoPath.exists()) {
+			bCreateRepo = flTargetRepoPath.mkdir();
+		}
+		if (bCreateRepo) {
 			
 			objArtifactController = new ArtifactController();
 			CopyFolder(strSourcePath, strDestinationPath + File.separator + strSrcFolder);
@@ -75,15 +78,22 @@ public class CreateRepo {
 					CopyFolder(subDirectories[i].getPath(), strTargetFolder);
 				} else {
 					File flTargetSubFolder = new File(strTargetFolder + File.separator + subDirectories[i].getName());
-					if (flTargetSubFolder.mkdirs()) {
+					if(!flTargetSubFolder.exists()) {
+						flTargetSubFolder.mkdirs();	
+					}
+					//if (flTargetSubFolder.mkdirs()) {
 						if (subDirectories[i].isFile()) {
 							String artifactID = objArtifactController.calculateArtifactId(subDirectories[i].getPath());
+							
 							String strExtension = subDirectories[i].toString().substring(subDirectories[i].toString().lastIndexOf("."));
+							File flArtifactPath = new File( flTargetSubFolder.getPath() + File.separator + artifactID + strExtension);
+							if(!flArtifactPath.exists()) {
 							Files.copy(subDirectories[i].toPath(),
 									  (new File(flTargetSubFolder.getPath() + File.separator + artifactID + strExtension)).toPath(),
 									  StandardCopyOption.REPLACE_EXISTING);
+							}
 						}
-					}
+					//}
 				}
 			}
 		}

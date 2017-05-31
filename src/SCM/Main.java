@@ -14,20 +14,21 @@ import java.util.regex.*;
 public class Main {
 	private static Scanner sc;
 	private static CreateRepo objCreateRepo = new CreateRepo();
-	private static String strPattern = "(?:[a-zA-Z]\\:)\\\\([\\w -]+\\\\)*\\w([\\w-.][a-zA-Z0-9\\-\\.\\_]*)+";
-
-	/*Function Name : calculateArtifactId
-	 *Parameters    : 1. strFile : Path of the File whose Artifact ID is to be calculated
-	 *Return Type   : String
-	 *Description   : This function gets the input parameter and calculates the Artifact ID of the given File. 
-	 *Created By    : Bandini Bhopi [24 Feb 2017]
-	 *Modfied By	: Samruddhi Kalyankar [25 Feb 2017]
-	 */
+	private static FindManifest objCheckOut =new FindManifest();
+	private static String strPattern = "(?:[a-zA-Z]\\:)\\\\([\\w -]+\\\\)*\\w([\\w-.])+";
+	private static String strManifestNumber = "[0-9]+-[0-9]+";
+	/*Function Name : main
+	*Return Type   : void
+	*Description   : Main Function 
+	*Created By    : Bandini Bhopi [24 Feb 2017]
+	*Modfied By	: Samruddhi Kalyankar [25 Feb 2017]
+	*					Sharol Dsouza[12 Feb 2017]
+	*/
 	public static void main(String[] args) throws IOException {
 		System.out.print(">>");
 		sc = new Scanner(System.in);
 		String strCommand = sc.nextLine();
-		if (strCommand.toLowerCase().startsWith("createrepo")) {
+		if (strCommand.toLowerCase().startsWith("createrepo") || strCommand.toLowerCase().startsWith("checkin")) {
 			
 			Pattern p = Pattern.compile(strPattern);
 			Matcher m = p.matcher(strCommand);
@@ -40,7 +41,26 @@ public class Main {
 			} else {
 				System.out.println("Invalid Command.");
 			}
-		} else {
+		} else if( strCommand.toLowerCase().startsWith("checkout")){
+			Pattern p = Pattern.compile(strPattern);
+			Matcher m = p.matcher(strCommand);
+			Pattern p2 = Pattern.compile(strManifestNumber);
+			Matcher m2 = p2.matcher(strCommand);
+			List<String> Arg =new ArrayList<String>();
+			while(m.find()){
+				Arg.add(m.group());
+			}
+			while(m2.find()){
+				Arg.add(m2.group());
+			}
+			if(Arg.size() == 3){
+				objCheckOut.maniCheckOut(strCommand,Arg.get(0),Arg.get(1),Arg.get(2));
+			}
+			else{
+				System.out.println("Invalid Command checkin/checkout");
+			}
+		}
+		else {
 			System.out.println("Invalid Command.");
 		}
 

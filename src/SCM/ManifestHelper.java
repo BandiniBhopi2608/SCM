@@ -24,7 +24,7 @@ public class ManifestHelper {
 		objManifest.SetArtifact(artilist);
 		// Collect all artifacts
 		ManifestController manifest = new ManifestController();
-		manifest.ManifestCreate(objManifest);
+		manifest.ManifestCreate(objManifest,objManifest.GetDestinationPath());
 	}
 	/*Function Name : GetArtifactList
 	 *Parameters    : 1. dir: target folder path of the project directory 

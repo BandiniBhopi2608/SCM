@@ -20,13 +20,24 @@ public class ManifestController {
 	 *Description   : Checks if activity folder exists.If not creates activity folder then generates a new manifest file each time it is called.  
 	 *Created By    : Sharol Dsouza [24 Feb 2017]
 	 */
-	public void ManifestCreate(Manifest objManifest) {
-		String strTargetRepoPath = objManifest.GetDestinationPath().substring(0, objManifest.GetDestinationPath().lastIndexOf(File.separator));
+	public void ManifestCreate(Manifest objManifest,String ManifestLocation) {
+		String strTargetRepoPath;
+		//System.out.println("Test");
+		if(objManifest.GetDestinationPath() == ManifestLocation){
+		strTargetRepoPath = objManifest.GetDestinationPath().substring(0, objManifest.GetDestinationPath().lastIndexOf(File.separator));
+		//System.out.println("Test1");
+		}
+		else{
+			strTargetRepoPath = objManifest.GetSourcePath();
+			
+		}
+		 
 		File file = new File(strTargetRepoPath + File.separator + "Activity");
 		if (!file.exists()) {
 			if (file.mkdir()) {
 				System.out.println("Repository created successfully!!");
 			}
+			
 		}
 		// if folder exists create a new manifest file
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
@@ -39,7 +50,7 @@ public class ManifestController {
 			dir.mkdirs();
 			File p = new File(dir, filename + ".txt");
 			p.createNewFile();
-
+			System.out.println(p);
 			// write in the new created file
 			FileOutputStream fout = new FileOutputStream(p);
 			BufferedWriter buffw = new BufferedWriter(new OutputStreamWriter(fout));
